@@ -71,7 +71,7 @@ var mapping={"0": {"0": 'nt',
 	}
 }
 
-var results={'blended': [], 'nt': [], 'contour': []}
+var results={'blended': [], 'nt': [], 'contour': [], 'conf': 'none'}
 
 var button = document.getElementById('show_button')
 button.addEventListener('click',start,false);
@@ -117,7 +117,7 @@ function theyClicked() {
 
     reactionTime = (clickedTime - createdTime) / 1000;
 
-    document.getElementById("printReactionTime").innerHTML="Your Reaction Time is: " + reactionTime + "seconds";
+    document.getElementById("printReactionTime").innerHTML="Your last reaction time was: " + reactionTime + "seconds";
     var imType = mapping[String(folder)][String(imageCount)]
     results[imType].push(reactionTime)
 
@@ -126,26 +126,58 @@ function theyClicked() {
 
 	mapping[String(folder)]
 
-	if(imageCount==20){
-		document.getElementById("thanks").innerHTML="Thank you for your kind participation!!";
-		document.getElementById("results").innerHTML=JSON.stringify(results);
-		const headers = new Headers()
-		headers.append("Content-Type", "application/json")
-
-		const options = {
-		  method: "POST",
-		  headers,
-		  mode: "cors",
-		  body: JSON.stringify(results),
-		}
-
-		fetch("https://2acc6819903828c56b5248a898070f98.m.pipedream.net", options).then(response => {
-		  console.log(response)
-		}).catch(err => {
-		  console.error("[error] " + err.message)
-		})
+	if(imageCount==1){
+		document.getElementById("instructions").style.display="none";
+		document.getElementById("readfirst").style.display="none";
+		document.getElementById("surveytext").style.display= "block";
+		document.getElementById("survey-blend").style.display= "inline";
+		document.getElementById("survey-nt").style.display= "inline";
+		document.getElementById("survey-contour").style.display= "inline";
 	}
 	else{
 	    makeBox();
 	}
+}
+
+function surveyClickBlend() {
+	results['best'] = 'blended';
+	finishAndPostResults();
+}
+
+function surveyClickNT() {
+	
+	results['best'] = 'nt';
+	finishAndPostResults();
+
+}
+function surveyClickContour() {
+
+	results['conf'] = 'contour';
+	finishAndPostResults();
+}
+
+function finishAndPostResults() {
+	document.getElementById("surveytext").style.display="none"
+	document.getElementById("survey-blend").style.display="none"
+	document.getElementById("survey-nt").style.display="none"
+	document.getElementById("survey-contour").style.display="none"
+
+	document.getElementById("thanks").innerHTML="Thank you for your kind participation!!";
+	document.getElementById("results").innerHTML=JSON.stringify(results);
+
+	const headers = new Headers()
+	headers.append("Content-Type", "application/json")
+
+	const options = {
+	  method: "POST",
+	  headers,
+	  mode: "cors",
+	  body: JSON.stringify(results),
+	}
+
+	fetch("https://2acc6819903828c56b5248a898070f98.m.pipedream.net", options).then(response => {
+	  console.log(response)
+	}).catch(err => {
+	  console.error("[error] " + err.message)
+	})
 }
