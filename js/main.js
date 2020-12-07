@@ -126,9 +126,24 @@ function theyClicked() {
 
 	mapping[String(folder)]
 
-	if(imageCount>2){
+	if(imageCount==20){
 		document.getElementById("thanks").innerHTML="Thank you for your kind participation!!";
 		document.getElementById("results").innerHTML=JSON.stringify(results);
+		const headers = new Headers()
+		headers.append("Content-Type", "application/json")
+
+		const options = {
+		  method: "POST",
+		  headers,
+		  mode: "cors",
+		  body: JSON.stringify(results),
+		}
+
+		fetch("https://2acc6819903828c56b5248a898070f98.m.pipedream.net", options).then(response => {
+		  console.log(response)
+		}).catch(err => {
+		  console.error("[error] " + err.message)
+		})
 	}
 	else{
 	    makeBox();
