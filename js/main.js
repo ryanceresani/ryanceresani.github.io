@@ -71,7 +71,7 @@ var mapping={"0": {"0": 'nt',
 	}
 }
 
-var results={'blended': [], 'nt': [], 'contour': [], 'conf': 'none'}
+var results={'blended': [], 'nt': [], 'contour': [], 'folder': folder, 'conf': 'none'}
 
 var button = document.getElementById('show_button')
 button.addEventListener('click',start,false);
@@ -126,7 +126,7 @@ function theyClicked() {
 
 	mapping[String(folder)]
 
-	if(imageCount==20){
+	if(imageCount==21){
 		document.getElementById("instructions").style.display="none";
 		document.getElementById("readfirst").style.display="none";
 		document.getElementById("surveytext").style.display= "block";
