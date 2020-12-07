@@ -140,13 +140,13 @@ function theyClicked() {
 }
 
 function surveyClickBlend() {
-	results['best'] = 'blended';
+	results['conf'] = 'blended';
 	finishAndPostResults();
 }
 
 function surveyClickNT() {
 	
-	results['best'] = 'nt';
+	results['conf'] = 'nt';
 	finishAndPostResults();
 
 }
