@@ -126,7 +126,7 @@ function theyClicked() {
 
 	mapping[String(folder)]
 
-	if(imageCount==21){
+	if(imageCount==20){
 		document.getElementById("instructions").style.display="none";
 		document.getElementById("readfirst").style.display="none";
 		document.getElementById("surveytext").style.display= "block";
