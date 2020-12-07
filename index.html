@@ -1,11 +1,27 @@
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+<h1>Explainable AI Timing Test</h1>
+	<h3>READ FIRST!</h3>
+	<p><b>Goal:</b> To determine which method of displaing Attribution Maps is the fastest for determining Neural Network Focus</p>
+
+	<p><b>Instructions:</b> Click <code>"Ready"</code> and images will continually (after a random pause) display. <br> These represent the most infuential pixels for the classification in the a Neural Network. <br><br><i>Where</i> it was looking...
+ 	<br> <br>
+	As <u>quickly</u> and <u>accurately</u> as you can, click on the general pixel location that you feel confident is the <b><u>"most"</u></b> important location.
+	</p>
+
+
+	<button id="show_button" class="favorite styled"
+	        type="button">
+	    Ready!
+	</button>
+
+
+	<p id="printReactionTime"></p>
+
+	<img id="box" onclick="theyClicked()"></img>
+
+	<p id="thanks"></p>
+	<p id="results"></p>
+
 <script src="js/main.js"></script>
-<style src="css/styles.css"></style>
-
-<h1>Test your reaction time!</h1>
-	<p>Click on the boxes and circles as quickly as you can. Your reaction time will be posted below: </p>
-	<p id="printReactionTime"></p<>
-
-	<div id="box"></div>
-
-	<img src="./imgs/0/0.jpg">
-	
