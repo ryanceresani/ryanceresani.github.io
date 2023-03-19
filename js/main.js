@@ -1,183 +1,146 @@
-
-var clickedTime;
-var createdTime;
-var reactionTime;
-var imageCount=0;
-var folder=getRndInteger(0,2);
-
-var mapping={"0": {"0": 'nt',
-	 "1": 'nt',
-	 "2": 'contour',
-	 "3": 'contour',
-	 "4": 'blended',
-	 "5": 'blended',
-	 "6": 'blended',
-	 "7": 'blended',
-	 "8": 'contour',
-	 "9": 'blended',
-	 "10": 'nt',
-	 "11": 'contour',
-	 "12": 'blended',
-	 "13": 'contour',
-	 "14": 'nt',
-	 "15": 'blended',
-	 "16": 'contour',
-	 "17": 'nt',
-	 "18": 'nt',
-	 "19": 'contour',
-	 "20": 'nt'},
-"1": {"0": 'blended',
-	 "1": 'contour',
-	 "2": 'blended',
-	 "3": 'nt',
-	 "4": 'contour',
-	 "5": 'nt',
-	 "6": 'contour',
-	 "7": 'blended',
-	 "8": 'nt',
-	 "9": 'contour',
-	 "10": 'nt',
-	 "11": 'contour',
-	 "12": 'nt',
-	 "13": 'nt',
-	 "14": 'contour',
-	 "15": 'contour',
-	 "16": 'blended',
-	 "17": 'nt',
-	 "18": 'blended',
-	 "19": 'blended',
-	 "20": 'blended'},
-"2": {"0": 'nt',
-	 "1": 'contour',
-	 "2": 'blended',
-	 "3": 'contour',
-	 "4": 'blended',
-	 "5": 'blended',
-	 "6": 'contour',
-	 "7": 'blended',
-	 "8": 'contour',
-	 "9": 'contour',
-	 "10": 'nt',
-	 "11": 'nt',
-	 "12": 'nt',
-	 "13": 'nt',
-	 "14": 'blended',
-	 "15": 'contour',
-	 "16": 'nt',
-	 "17": 'blended',
-	 "18": 'blended',
-	 "19": 'nt',
-	 "20": 'contour'
-	}
-}
-
-var results={'blended': [], 'nt': [], 'contour': [], 'folder': folder, 'conf': 'none'}
-
-var button = document.getElementById('show_button')
-button.addEventListener('click',start,false);
-
-function start() {
-    this.style.display = 'none';
-    document.getElementById('box').src='imgs/' + folder +'/' + imageCount + '.jpg';
-    makeBox();
-} 
-
-function getRndInteger(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
-function makeBox() {
-    var time = Math.random();
-    time = time * 2000;
-
-    setTimeout(function() {
-
-        var top = Math.random();
-        top = top * 200;
-        var left = Math.random();
-        left = left * 200;
-
-        document.getElementById("box").style.top = top + "px";
-        document.getElementById("box").style.left = left + "px";
-
-        document.getElementById("box").style.display = "block";
-        createdTime = Date.now();
-        imageCount++
-    }, time);
-
-}
-
-function theyClicked() {
-
-	if (!document.getElementById("printReactionTime")) {
-		return
-	}
-
-    clickedTime = Date.now();
-
-    reactionTime = (clickedTime - createdTime) / 1000;
-
-    document.getElementById("printReactionTime").innerHTML="Your last reaction time was: " + reactionTime + "seconds";
-    var imType = mapping[String(folder)][String(imageCount)]
-    results[imType].push(reactionTime)
-
-    document.getElementById("box").style.display = "none";
-	document.getElementById("box").src = 'imgs/' + folder +'/' + imageCount + '.jpg';
-
-	mapping[String(folder)]
-
-	if(imageCount==20){
-		document.getElementById("instructions").style.display="none";
-		document.getElementById("readfirst").style.display="none";
-		document.getElementById("surveytext").style.display= "block";
-		document.getElementById("survey-blend").style.display= "inline";
-		document.getElementById("survey-nt").style.display= "inline";
-		document.getElementById("survey-contour").style.display= "inline";
-	}
-	else{
-	    makeBox();
-	}
-}
-
-function surveyClickBlend() {
-	results['conf'] = 'blended';
-	finishAndPostResults();
-}
-
-function surveyClickNT() {
-	
-	results['conf'] = 'nt';
-	finishAndPostResults();
-
-}
-function surveyClickContour() {
-
-	results['conf'] = 'contour';
-	finishAndPostResults();
-}
-
-function finishAndPostResults() {
-	document.getElementById("surveytext").style.display="none"
-	document.getElementById("survey-blend").style.display="none"
-	document.getElementById("survey-nt").style.display="none"
-	document.getElementById("survey-contour").style.display="none"
-
-	document.getElementById("thanks").innerHTML="Thank you for your kind participation!!";
-	document.getElementById("results").innerHTML=JSON.stringify(results);
-
-	const headers = new Headers()
-	headers.append("Content-Type", "application/json")
-
-	const options = {
-	  method: "POST",
-	  headers,
-	  mode: "cors",
-	  body: JSON.stringify(results),
-	}
-
-	fetch("https://2acc6819903828c56b5248a898070f98.m.pipedream.net", options).then(response => {
-	  console.log(response)
-	}).catch(err => {
-	  console.error("[error] " + err.message)
-	})
-}
+var padding = {top:20, right:40, bottom:0, left:0},
+            w = 500 - padding.left - padding.right,
+            h = 500 - padding.top  - padding.bottom,
+            r = Math.min(w, h)/2,
+            rotation = 0,
+            oldrotation = 0,
+            picked = 100000,
+            oldpick = [],
+            color = d3.scale.category20();//category20c()
+            //randomNumbers = getRandomNumbers();
+        //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
+        var data = [
+                    {"label":"Dell LAPTOP",  "value":1,  "question":"What CSS property is used for specifying the area between the content and its border?"}, // padding
+                    {"label":"IMAC PRO",  "value":2,  "question":"What CSS property is used for changing the font?"}, //font-family
+                    {"label":"SUZUKI",  "value":3,  "question":"What CSS property is used for changing the color of text?"}, //color
+                    {"label":"HONDA",  "value":4,  "question":"What CSS property is used for changing the boldness of text?"}, //font-weight
+                    {"label":"FERRARI",  "value":5,  "question":"What CSS property is used for changing the size of text?"}, //font-size
+                    {"label":"APARTMENT",  "value":6,  "question":"What CSS property is used for changing the background color of a box?"}, //background-color
+                    {"label":"IPAD PRO",  "value":7,  "question":"Which word is used for specifying an HTML tag that is inside another tag?"}, //nesting
+                    {"label":"LAND",  "value":8,  "question":"Which side of the box is the third number in: margin:1px 1px 1px 1px; ?"}, //bottom
+                    {"label":"MOTOROLLA",  "value":9,  "question":"What are the fonts that don't have serifs at the ends of letters called?"}, //sans-serif
+                    {"label":"BMW", "value":10, "question":"With CSS selectors, what character prefix should one use to specify a class?"}
+        ];
+        var svg = d3.select('#chart')
+            .append("svg")
+            .data([data])
+            .attr("width",  w + padding.left + padding.right)
+            .attr("height", h + padding.top + padding.bottom);
+        var container = svg.append("g")
+            .attr("class", "chartholder")
+            .attr("transform", "translate(" + (w/2 + padding.left) + "," + (h/2 + padding.top) + ")");
+        var vis = container
+            .append("g");
+            
+        var pie = d3.layout.pie().sort(null).value(function(d){return 1;});
+        // declare an arc generator function
+        var arc = d3.svg.arc().outerRadius(r);
+        // select paths, use arc generator to draw
+        var arcs = vis.selectAll("g.slice")
+            .data(pie)
+            .enter()
+            .append("g")
+            .attr("class", "slice");
+            
+        arcs.append("path")
+            .attr("fill", function(d, i){ return color(i); })
+            .attr("d", function (d) { return arc(d); });
+        // add the text
+        arcs.append("text").attr("transform", function(d){
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle)/2;
+                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+            })
+            .attr("text-anchor", "end")
+            .text( function(d, i) {
+                return data[i].label;
+            });
+        container.on("click", spin);
+        function spin(d){
+            
+            container.on("click", null);
+            //all slices have been seen, all done
+            console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+            if(oldpick.length == data.length){
+                console.log("done");
+                container.on("click", null);
+                return;
+            }
+            var  ps       = 360/data.length,
+                 pieslice = Math.round(1440/data.length),
+                 rng      = Math.floor((Math.random() * 1440) + 360);
+                
+            rotation = (Math.round(rng / ps) * ps);
+            
+            picked = Math.round(data.length - (rotation % 360)/ps);
+            picked = picked >= data.length ? (picked % data.length) : picked;
+            if(oldpick.indexOf(picked) !== -1){
+                d3.select(this).call(spin);
+                return;
+            } else {
+                oldpick.push(picked);
+            }
+            rotation += 90 - Math.round(ps/2);
+            vis.transition()
+                .duration(3000)
+                .attrTween("transform", rotTween)
+                .each("end", function(){
+                    //mark question as seen
+                    d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+                        .attr("fill", "#111");
+                    //populate question
+                    d3.select("#question h1")
+                        .text(data[picked].question);
+                    oldrotation = rotation;
+              
+                    /* Get the result value from object "data" */
+                    console.log(data[picked].value)
+              
+                    /* Comment the below line for restrict spin to sngle time */
+                    container.on("click", spin);
+                });
+        }
+        //make arrow
+        svg.append("g")
+            .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
+            .append("path")
+            .attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
+            .style({"fill":"black"});
+        //draw spin circle
+        container.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 60)
+            .style({"fill":"white","cursor":"pointer"});
+        //spin text
+        container.append("text")
+            .attr("x", 0)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .text("SPIN")
+            .style({"font-weight":"bold", "font-size":"30px"});
+        
+        
+        function rotTween(to) {
+          var i = d3.interpolate(oldrotation % 360, rotation);
+          return function(t) {
+            return "rotate(" + i(t) + ")";
+          };
+        }
+        
+        
+        function getRandomNumbers(){
+            var array = new Uint16Array(1000);
+            var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+            if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
+                window.crypto.getRandomValues(array);
+                console.log("works");
+            } else {
+                //no support for crypto, get crappy random numbers
+                for(var i=0; i < 1000; i++){
+                    array[i] = Math.floor(Math.random() * 100000) + 1;
+                }
+            }
+            return array;
+        }

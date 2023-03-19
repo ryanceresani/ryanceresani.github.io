@@ -1,42 +1,4 @@
-<link rel="stylesheet" type="text/css" href="style.css">
-
-
-<h1>Explainable AI Timing Test</h1>
-	<h3 id="readfirst">READ FIRST!</h3>
-	<p><b>Goal:</b> To determine which method of displaying Attribution Maps is the fastest for determining Neural Network Focus</p>
-
-	<p id="instructions"><b>Instructions:</b> Click <code>"Ready"</code> and <b>21 images</b> will continually (after a random pause) display. <br> These represent the most infuential pixels for the classification in the a Neural Network. <br><br><i>Where</i> it was looking...
- 	<br> <br>
-	As <u>quickly</u> and <u>accurately</u> as you can, click on the general pixel location that you feel confident is the <b><u>"most"</u></b> important location.
-	</p>
-	<p id="printReactionTime"></p>
-	<p id="surveytext" style="display: none;"><b>Last Question!:</b> During the course of the study, which style of image gave you the <u>most confidence</u> you were picking the correct area? <br> <br>
-	<b>Click image style to answer and finish.</b></p>
-	<hr>
-
-
-	<button id="show_button" class="favorite styled"
-	        type="button">
-	    Ready!
-	</button>
-
-
-	<img id="box" onclick="theyClicked()"></img>
-
-	<ul>
-		<li>
-	    <img name="blend" src="imgs/best/blended.jpg" id="survey-blend" display="none" onclick="surveyClickBlend()" style="display: none;" style="width:100%"></img>
-	  </li>
-	  <li>
-	    	<img name="nt" id="survey-nt" src="imgs/best/nt.jpg" onclick="surveyClickNT()" style="display: none;" style="width:100%"></img>
-	  </li>
-	  <li>
-	    <img name="contour" id="survey-contour" src="imgs/best/contour.jpg" onclick="surveyClickContour()"style="display: none;" style="width:100%"></img>
-	  </li>
-	</ul>
-
-
-	<h2 id="thanks"></h2>
-	<p id="results"></p>
-
-<script src="js/main.js"></script>
+<div id="chart"></div>
+    <div id="question"><h1></h1></div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
