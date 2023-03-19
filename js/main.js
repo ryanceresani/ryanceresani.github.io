@@ -4,20 +4,24 @@ var game;
 var gameOptions = {
 
     // slices (prizes) placed in the wheel
-    slices: 6,
+    slices: 10,
 
     // prize names, starting from 12 o'clock going clockwise
     slicePrizes: [
-        "🎉 5% OFF",
-        "🎉 10% OFF",
-        "🎉 15% OFF",
-        "🎉 25% OFF",
-        "🎉 50% OFF",
-        "🎉 FREE PASTRY 🍰"
+        "2 Acorns",
+        "Yellow",
+        "Wind Storm!!",
+        "Purple",
+        "Sad Squirrel",
+        "Red",
+        "1 Acorn",
+        "Blue",
+        "Sneaky Squirrel",
+        "Green",
     ],
 
     // wheel rotation duration, in milliseconds
-    rotationTime: 3000
+    rotationTime: 1000
 }
 
 // once the window loads...
@@ -36,7 +40,7 @@ window.onload = function () {
         height: 850,
 
         // game background color
-        backgroundColor: 0x880044,
+        backgroundColor: 0xF5F5DC,
 
         // scenes used by the game
         scene: [playGame]
@@ -62,8 +66,8 @@ class playGame extends Phaser.Scene {
     // method to be executed when the scene preloads
     preload() { // loading assets
 
-        this.load.image("wheel", window.location.href + "images/wheel.png");
-        this.load.image("pin", window.location.href + "images/pin.png");
+        this.load.image("wheel", window.location.href + "images/spinner1-2.png");
+        this.load.image("pin", window.location.href + "images/acorn.png");
     }
 
     // method to be executed once the scene has been created
@@ -76,10 +80,10 @@ class playGame extends Phaser.Scene {
         this.pin = this.add.sprite(game.config.width / 2, game.config.height / 2, "pin");
 
         // adding the text field
-        this.prizeText = this.add.text(game.config.width / 2, game.config.height - 35, "SPIN TO WIN", {
-            font: "bold 64px Rajdhani",
+        this.prizeText = this.add.text(game.config.width / 2, game.config.height - 45, "Sneaky, Snacky Squirrel!", {
+            font: "bold 50px Rajdhani",
             align: "center",
-            color: "white"
+            color: "black"
         });
 
         // center the text
@@ -136,9 +140,10 @@ class playGame extends Phaser.Scene {
                 onComplete: function (tween) {
                     // displaying prize text
                     this.prizeText.setText(gameOptions.slicePrizes[prize]);
+                    // this.prizeText.setText(1 - Math.floor(degrees / (360 / gameOptions.slices)))
 
                     // player can spin again
-                    this.canSpin = false;
+                    this.canSpin = true;
                 }
             });
         }
