@@ -21,7 +21,7 @@ var gameOptions = {
     ],
 
     // wheel rotation duration, in milliseconds
-    rotationTime: 1000
+    rotationTime: 3000
 }
 
 // once the window loads...
@@ -139,8 +139,7 @@ class playGame extends Phaser.Scene {
                 // function to be executed once the tween has been completed
                 onComplete: function (tween) {
                     // displaying prize text
-                    this.prizeText.setText(gameOptions.slicePrizes[prize]);
-                    // this.prizeText.setText(1 - Math.floor(degrees / (360 / gameOptions.slices)))
+                    // this.prizeText.setText(gameOptions.slicePrizes[prize]);
 
                     // player can spin again
                     this.canSpin = true;
